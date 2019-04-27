@@ -138,6 +138,10 @@ if os.getcwd() == '/app':
     DATABASES = {
         'default': dj_database_url.config(default='postgres://localhost')
     }
+
+    # Хостом проекта может быть только Heroku.
+    ALLOWED_HOSTS = ['sanchows.herokuapp.com']
+    DEBUG = False
     
     # Поддержка заголовка 'X-Forwarded-Proto' для request.is_secure().
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
