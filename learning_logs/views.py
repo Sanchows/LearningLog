@@ -71,8 +71,7 @@ def new_topic(request):
 @login_required
 def new_entry(request, topic_id):
     """Добавляет новую запись по конкретной теме."""
-    topic = Topic.objects.get(id=topic_id)
-    
+    topic = Topic.objects.get(id=topic_id)    
     check_topic_owner(request, topic)
     
     if request.method != 'POST':
