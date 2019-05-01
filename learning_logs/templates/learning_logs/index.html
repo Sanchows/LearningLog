@@ -10,7 +10,13 @@
 
 <h2>
     <div class="alert" role="alert">
-        <a href="{% url 'register' %}" class="alert-link">Создайте</a> свой собственный журнал обучения, перечисляйте темы, которые вы изучаете.
+        {% if user.is_authenticated %}
+            <a href="{% url 'topics' %}" class="alert-link">Перейти</a> к вашему списку изучаемых тем.
+        {% else %}
+            <a href="{% url 'register' %}" class="alert-link">Создайте</a> свой собственный журнал обучения, перечисляйте темы, которые вы изучаете.<br>
+            Уже есть журнал? <a href="{% url 'login' %}" class="alert-link">Войти</a>
+        {% endif %}
+        
     </div>
 </h2>
 {% endblock content %}
