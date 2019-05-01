@@ -9,18 +9,24 @@ from django.contrib.auth.decorators import login_required
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 
-
-
 def index(request):
     """Домашняя страница приложения Learning Log"""
     return render(request, 'learning_logs/index.html')
 
-@login_required
+#@login_required
 def topics(request):
     """Вывод всех тем, созданных пользователями"""
-    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
-    context = {'topics': topics}
-    return render(request, 'learning_logs/topics.html', context)
+    
+    topics_public = Topic.objects.filter(public=True).order_by('date_added') # темы public
+    
+    if request.user.is_authenticated:
+        topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+        context = {'topics': topics,'topics_public': topics_public}
+        return render(request, 'learning_logs/topics.html', context)
+    else:
+        context = {'topics_public': topics_public}
+        return render(request, 'learning_logs/topics.html', context)
+        
 
 @login_required
 def topic(request, topic_id):
@@ -28,11 +34,16 @@ def topic(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
     
     # Проверка того, что тема принадлежит текущему пользователю.
-    check_topic_owner(request, topic)
+    if not topic.public:
+        check_topic_owner(request, topic)
 
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
+
+def check_topic_owner(request, topic):
+    if topic.owner != request.user:
+        raise Http404
 
 @login_required
 def new_topic(request):
@@ -43,9 +54,14 @@ def new_topic(request):
     else:
         # Отправлены данные POST; обработать данные
         form = TopicForm(request.POST)
+        print(request.POST)
         if form.is_valid():
             new_topic = form.save(commit=False)
             new_topic.owner = request.user
+            for key in request.POST:
+                if key == 'public':
+                    new_topic.public = True
+
             new_topic.save()
             return HttpResponseRedirect(reverse('topics'))
     
@@ -56,7 +72,7 @@ def new_topic(request):
 def new_entry(request, topic_id):
     """Добавляет новую запись по конкретной теме."""
     topic = Topic.objects.get(id=topic_id)
-
+    
     check_topic_owner(request, topic)
     
     if request.method != 'POST':
@@ -96,7 +112,3 @@ def edit_entry(request, entry_id):
     
     context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
-
-def check_topic_owner(request, topic):
-    if topic.owner != request.user:
-        raise Http404

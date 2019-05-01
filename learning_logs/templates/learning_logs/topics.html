@@ -1,16 +1,37 @@
 {% extends "learning_logs/base.html" %}
 {% block header %}
-    <h1>Список тем</h1>
+<h2>Темы</h2>
 {% endblock header %}
 
 {% block content %}
-    <div class="list-group">
-        {% for topic in topics %}
-            <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">{{ topic }}</a> 
-        {% empty %}
-            <li>У вас нет ни одной темы.</li>
-        {% endfor %}
+    <div class="alert" role="alert">
+        {% if user.is_authenticated %}
+            <h2>Ваши темы</h2>
+            <div class="list-group">
+                {% for topic in topics %}
+                    <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">{{ topic }}</a> 
+                {% empty %}
+                    <li>У вас нет ни одной темы.</li>
+                {% endfor %}
+            </div>
+        {% else %} 
+            <h2>Создайте журнал</h2>
+            <a href="{% url 'register' %}" class="alert-link">Создайте</a> свой собственный журнал обучения, перечисляйте темы, которые вы изучаете.<br>
+            Уже есть журнал? <a href="{% url 'login' %}" class="alert-link">Войти</a>
+        {% endif %} 
+
+        <br>
+        <h2>Список общедоступных тем</h2>
+        <div class="list-group">
+            {% for topic in topics_public %}
+                <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">{{ topic }}</a> 
+            {% empty %}
+                <li>У вас нет ни одной темы.</li>
+            {% endfor %}
+        </div>
     </div>
+
+    
     </ul>
     <a class="btn btn-primary" href="{% url 'new_topic' %}" role="button">Добавить новую тему</a>
 {% endblock content %}
