@@ -13,6 +13,7 @@ class Topic(models.Model):
     def __str__(self):
         """Возвращает строковое представление модели"""
         return self.text
+        
 
 class Entry(models.Model):
     """Информация, изученная пользователем по теме"""
