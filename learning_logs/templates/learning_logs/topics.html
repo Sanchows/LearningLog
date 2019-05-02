@@ -23,7 +23,7 @@
         <h2>Список общедоступных тем</h2>
         <div class="list-group">
             {% for topic in topics_public %}
-                <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">{{ topic }}</a> 
+                <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">{{ topic }} <small>Автор: {{ topic.owner }}</small></a> 
             {% empty %}
                 <li>У вас нет ни одной темы.</li>
             {% endfor %}
