@@ -18,10 +18,10 @@ def index(request):
 def topics(request):
     """Вывод всех тем, созданных пользователями"""
     
-    topics_public = Topic.objects.filter(public=True).order_by('date_added') # темы public
+    topics_public = Topic.objects.filter(public=True).order_by('-date_added') # темы public
     
     if request.user.is_authenticated:
-        topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+        topics = Topic.objects.filter(owner=request.user).order_by('-date_added')
         context = {'topics': topics,'topics_public': topics_public}
         return render(request, 'learning_logs/topics.html', context)
     else:
