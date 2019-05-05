@@ -1,12 +1,14 @@
 {% extends 'learning_logs/base.html' %}
 {% block header %}
     <h2>{{ topic }} 
-            <small>
-                    <a href="{% url 'edit_topic' topic.id %}" class="btn btn-success btn-sm" role="button">Редактировать тему</a>
-            </small>
+            {% if topic.owner.id == user.id %}
+                <small>
+                        <a href="{% url 'edit_topic' topic.id %}" class="btn btn-success btn-sm" role="button">Редактировать тему</a>
+                </small>
+            {% endif %}
         <small>
             {% if topic.public %}
-                Общедоступная тема. Зарегистрированные могут читать записи в этой теме
+                Общедоступная тема{% if topic.owner.id == user.id %}. Зарегистрированные могут читать записи в этой теме {% endif %}
             {% endif %}
             <font size=3>
                 <br>
@@ -32,7 +34,7 @@
     {% for entry in entries %}
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3>
+                <h4 class="card-header">
                     {{ entry.date_added|date:'M d, Y H:i' }}
                     {% if topic.owner.id == user.id %}
                         <small>
@@ -42,7 +44,7 @@
                             <a href="{% url 'delete_entry' entry.id %}" class="btn btn-danger btn-sm" role="button">Удалить</a>
                         </small>
                     {% endif %}
-                </h3>
+                </h4>
             </div>
             <div class="panel-body">
                 {{ entry.text|linebreaks }}
