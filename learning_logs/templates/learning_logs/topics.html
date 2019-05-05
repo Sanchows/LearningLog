@@ -4,26 +4,71 @@
 {% endblock header %}
 
 {% block content %}
+<style>   
+        .two { float: left; }
+        .two:last-child { float: right; }
+        .one:after {
+            display: block;
+            width: 100%;
+            content: '';
+            clear: both;
+        }
+</style>
     <div class="alert" role="alert">
         {% if user.is_authenticated %}
             <h2>Ваши темы</h2>
             <div class="list-group">
                 {% for topic in topics %}
-                    <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">{{ topic }}</a> 
+                    <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">
+                        <div class="one">
+                            <div class="two">
+                                <font size="4">
+                                    {{ topic }}
+                                    {% if topic.public %}
+                                        <font size="3"><small>(Общедоступная)</small></font>
+                                    {% endif %}
+                                </font>
+                            </div>
+                            <div class="two">
+                                <small>
+                                    Автор: {{ topic.owner }}
+                                    <br>
+                                    {{ topic.date_added }}
+                                </small>
+                            </div>
+                        </div>
+                    </a> 
                 {% empty %}
                     <li>У вас нет ни одной темы.</li>
                 {% endfor %}
+                
             </div>
+            <a class="btn btn-primary" href="{% url 'new_topic' %}" role="button">Добавить новую тему</a>
         {% else %} 
             <h2>Создайте журнал</h2>
             <a href="{% url 'register' %}" class="alert-link">Создайте</a> свой собственный журнал обучения, перечисляйте темы, которые вы изучаете.<br>
             Уже есть журнал? <a href="{% url 'login' %}" class="alert-link">Войти</a>
         {% endif %} 
-        <br>
+        <hr>
         <h2>Список общедоступных тем</h2>
         <div class="list-group">
             {% for topic in topics_public %}
-                <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">{{ topic }} <small>Автор: {{ topic.owner }}</small></a> 
+                <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">
+                    <div class="one">
+                        <div class="two">
+                            <font size=4>
+                                {{ topic }}
+                            </font>
+                        </div>
+                        <div class="two">
+                            <small>
+                                Автор: {{ topic.owner }}
+                                <br>
+                                {{ topic.date_added }}
+                            </small>
+                        </div>
+                    </div>
+                </a>
             {% empty %}
                 <li>У вас нет ни одной темы.</li>
             {% endfor %}
@@ -32,5 +77,5 @@
 
     
     </ul>
-    <a class="btn btn-primary" href="{% url 'new_topic' %}" role="button">Добавить новую тему</a>
+
 {% endblock content %}

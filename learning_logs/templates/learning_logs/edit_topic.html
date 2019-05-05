@@ -1,0 +1,28 @@
+{% extends "learning_logs/base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+    <h2>{{ topic }}<small>
+        {% if topic.public %}
+            Общедоступная тема
+        {% endif %}
+        <font size=3>
+            <br>
+            Автор: {{ topic.owner }} 
+            <br> 
+            Дата создания: {{ topic.date_added }}
+        </font>
+    </small></h2>
+    <h2>Редактирование темы</h2>
+{% endblock header %}
+
+{% block content %}
+    <form action="{% url 'edit_topic' topic.id %}" method='post'>
+        <h4>Текст записи</h4>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button name="submit" class="btn btn-primary">Сохранить изменения</button>
+        {% endbuttons %}
+    </form>
+{% endblock content %}

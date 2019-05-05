@@ -1,7 +1,7 @@
 from django import forms
 from .models import Topic, Entry
 
-class TopicForm(forms.ModelForm):
+class TopicForm(forms.ModelForm):      
     public = forms.BooleanField(required=False)
 
     class Meta:

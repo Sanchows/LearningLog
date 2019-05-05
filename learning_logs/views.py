@@ -55,7 +55,7 @@ def new_topic(request):
     else:
         # Отправлены данные POST; обработать данные
         form = TopicForm(request.POST)
-        print(request.POST)
+
         if form.is_valid():
             new_topic = form.save(commit=False)
             new_topic.owner = request.user
@@ -68,6 +68,14 @@ def new_topic(request):
     
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
+
+@login_required
+def delete_topic(request, topic_id):
+    topic = get_object_or_404(Topic, id = topic_id)
+    check_topic_owner(request, topic)
+
+    topic.delete()
+    return HttpResponseRedirect(reverse('topics'))
 
 @login_required
 def new_entry(request, topic_id):
@@ -91,6 +99,14 @@ def new_entry(request, topic_id):
     return render(request, 'learning_logs/new_entry.html', context)
 
 @login_required
+def delete_entry(request, entry_id):
+    entry = get_object_or_404(Entry, id = entry_id)
+    check_topic_owner(request, entry.topic)
+
+    entry.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+    
+@login_required
 def edit_entry(request, entry_id):
     """Редактирует существующую запись."""
     
@@ -112,3 +128,29 @@ def edit_entry(request, entry_id):
     
     context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
+
+@login_required
+def edit_topic(request, topic_id):
+    topic = get_object_or_404(Topic, id = topic_id)
+    check_topic_owner(request, topic)
+    
+    if request.method != 'POST':
+        form = TopicForm(instance=topic)
+        public = form.save(commit = False).public # true / false
+        if public:
+            form.fields['public'].initial = True # поставить галочку
+    else:
+        form = TopicForm(instance=topic, data=request.POST)
+        if form.is_valid():
+            new_topic = form.save(commit=False)
+            # for key in request.POST:
+            if 'public' in request.POST:
+                new_topic.public = True
+            else:
+                new_topic.public = False
+
+            new_topic.save()
+            return HttpResponseRedirect(reverse('topic', args=[topic.id]))
+    
+    context = {'topic': topic, 'form': form}
+    return render(request, 'learning_logs/edit_topic.html', context)

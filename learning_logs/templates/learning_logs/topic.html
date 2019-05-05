@@ -1,6 +1,26 @@
 {% extends 'learning_logs/base.html' %}
 {% block header %}
-    <h2>{{ topic }} <small>Автор: {{ topic.owner }}</small></h2>
+    <h2>{{ topic }} 
+            <small>
+                    <a href="{% url 'edit_topic' topic.id %}" class="btn btn-success btn-sm" role="button">Редактировать тему</a>
+            </small>
+        <small>
+            {% if topic.public %}
+                Общедоступная тема. Зарегистрированные могут читать записи в этой теме
+            {% endif %}
+            <font size=3>
+                <br>
+                Автор: {{ topic.owner }} 
+                <br> 
+                Дата создания: {{ topic.date_added }}
+            </font>
+        </small>
+    </h2>
+    {% if topic.owner.id == user.id %}
+        <p>
+            <a class="btn btn-danger" href="{% url 'delete_topic' topic.id %}" role="button">Удалить тему</a>
+        </p>
+    {% endif %}
 {% endblock header %}
 
 {% block content %}
@@ -16,7 +36,10 @@
                     {{ entry.date_added|date:'M d, Y H:i' }}
                     {% if topic.owner.id == user.id %}
                         <small>
-                            <a href="{% url 'edit_entry' entry.id %}" class="btn btn-primary btn-sm" role="button">Редактировать</a>
+                            <a href="{% url 'edit_entry' entry.id %}" class="btn btn-success btn-sm" role="button">Редактировать</a>
+                        </small>
+                        <small>
+                            <a href="{% url 'delete_entry' entry.id %}" class="btn btn-danger btn-sm" role="button">Удалить</a>
                         </small>
                     {% endif %}
                 </h3>
@@ -27,6 +50,9 @@
         </div> <!-- panel -->
         
     {% empty %}
+    <h3>
         В этой теме пока нет записей.
+    </h3>
     {% endfor %}
+    
 {% endblock content %}
