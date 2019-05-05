@@ -59,9 +59,11 @@ def new_topic(request):
         if form.is_valid():
             new_topic = form.save(commit=False)
             new_topic.owner = request.user
-            for key in request.POST:
-                if key == 'public':
-                    new_topic.public = True
+            # for key in request.POST:
+            #     if key == 'public':
+            #         new_topic.public = True
+            if 'public' in request.POST:
+                new_topic.public = True
 
             new_topic.save()
             return HttpResponseRedirect(reverse('topics'))
@@ -110,7 +112,7 @@ def delete_entry(request, entry_id):
 def edit_entry(request, entry_id):
     """Редактирует существующую запись."""
     
-    entry = Entry.objects.get(id=entry_id)
+    entry = get_object_or_404(Entry, id=entry_id)
     topic = entry.topic
 
     check_topic_owner(request, topic)
@@ -143,7 +145,6 @@ def edit_topic(request, topic_id):
         form = TopicForm(instance=topic, data=request.POST)
         if form.is_valid():
             new_topic = form.save(commit=False)
-            # for key in request.POST:
             if 'public' in request.POST:
                 new_topic.public = True
             else:

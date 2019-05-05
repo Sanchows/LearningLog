@@ -27,7 +27,7 @@ urlpatterns = [
     path('edit_topic/<topic_id>', views.edit_topic, name='edit_topic'),
 
     # Удаление темы
-    path('topics/<topic_id>/delete', views.delete_topic, name='delete_topic'),
+    path('delete_topic/<topic_id>', views.delete_topic, name='delete_topic'),
 
     # Удаление записи
     path('delete_entry/<entry_id>', views.delete_entry, name='delete_entry'),
