@@ -29,7 +29,7 @@ def topics(request):
         return render(request, 'learning_logs/topics.html', context)
         
 
-@login_required
+#@login_required
 def topic(request, topic_id):
     """Выводит одну тему и все ее записи"""
     topic = get_object_or_404(Topic, id=topic_id)

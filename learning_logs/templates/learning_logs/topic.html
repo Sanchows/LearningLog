@@ -8,7 +8,7 @@
             {% endif %}
         <small>
             {% if topic.public %}
-                Общедоступная тема{% if topic.owner.id == user.id %}. Зарегистрированные могут читать записи в этой теме {% endif %}
+                <br>Общедоступная тема{% if topic.owner.id == user.id %}. Зарегистрированные могут читать записи в этой теме {% endif %}
             {% endif %}
             <font size=3>
                 <br>
