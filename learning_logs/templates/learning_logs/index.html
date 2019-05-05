@@ -13,7 +13,6 @@
 {% endblock header %}
 
 {% block content %}
-
 <h2>
     <div class="alert" role="alert">
         {% if user.is_authenticated %}
@@ -25,4 +24,24 @@
         
     </div>
 </h2>
+
+<div class="col-sm-6 col-md-5">
+        <div class="thumbnail">
+            <div class="caption">
+                <h3>Обновления</h3>
+                <ul class="list-group">
+                {% for update in updates %}
+                    <li class="list-group-item">
+                        <span class="badge">{{ update.date_added }}</span>
+                    {{ update }}
+                    </li>
+                {% empty %}
+                    <p>no</p>
+                {% endfor %}
+                </ul>
+                <p><a href="{% url 'topic' topic_id %}" class="btn btn-primary" role="button">Подробнее об обновлениях</a></p>
+            </div>
+        </div>
+    </div>
+</div> 
 {% endblock content %}

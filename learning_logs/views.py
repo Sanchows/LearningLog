@@ -11,7 +11,14 @@ from .forms import TopicForm, EntryForm
 
 def index(request):
     """Домашняя страница приложения Learning Log"""
-    return render(request, 'learning_logs/index.html')
+    try:
+        updates = Entry.objects.filter(topic=19).order_by('-date_added')[:5]
+        topic_id = 19
+    except:
+        updates = Entry.objects.filter(topic=7).order_by('-date_added')[:5]
+        topic_id = 7
+    context = {'updates': updates, 'topic_id': topic_id}
+    return render(request, 'learning_logs/index.html', context)
     
 
 #@login_required
@@ -28,7 +35,6 @@ def topics(request):
         context = {'topics_public': topics_public}
         return render(request, 'learning_logs/topics.html', context)
         
-
 #@login_required
 def topic(request, topic_id):
     """Выводит одну тему и все ее записи"""
