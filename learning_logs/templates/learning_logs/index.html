@@ -1,14 +1,37 @@
 {% extends "learning_logs/base.html" %}
 {% block header %}
-<div class='jumbotron'>
-    <h1>Журнал обучения. <br></h1>
-        <h2><small>
-            <div class="list-group">
-                <li>Создавайте свой собственный журнал.</li> 
-                <li>Создавайте в журнале свои темы, добавляйте в них записи. </li>
-                <li>Вы можете сделать тему общедоступной либо только для себя!</li>
+<div class="wrap"> 
+    <div class='jumbotron'>
+        <h1>Журнал обучения. <br></h1>
+            <h2><small>
+                <div class="list-group">
+                    <li>Создавайте свой собственный журнал.</li> 
+                    <li>Создавайте в журнале свои темы, добавляйте в них записи. </li>
+                    <li>Вы можете сделать тему общедоступной либо только для себя!</li>
+                </div>
+            </small></h2>
+            <style>   
+                .wrap {display: flex;}
+        </style>
+    </div> 
+    <div class="col-sm-7 col-md-4" >
+        <div class="thumbnail lll">
+            <div class="caption">
+                <h3>Обновления</h3>
+                <ul class="list-group">
+                {% for update in updates %}
+                    <li class="list-group-item">
+                        <span class="badge">{{ update.date_added }}</span>
+                    {{ update }}
+                    </li>
+                {% empty %}
+                    <p>no</p>
+                {% endfor %}
+                </ul>
+                <p><a href="{% url 'topic' topic_id %}" class="btn btn-primary" role="button">Подробнее об обновлениях</a></p>
             </div>
-        </small></h2>
+        </div>
+    </div> 
 </div>
 {% endblock header %}
 
@@ -25,23 +48,5 @@
     </div>
 </h2>
 
-<div class="col-sm-6 col-md-5">
-        <div class="thumbnail">
-            <div class="caption">
-                <h3>Обновления</h3>
-                <ul class="list-group">
-                {% for update in updates %}
-                    <li class="list-group-item">
-                        <span class="badge">{{ update.date_added }}</span>
-                    {{ update }}
-                    </li>
-                {% empty %}
-                    <p>no</p>
-                {% endfor %}
-                </ul>
-                <p><a href="{% url 'topic' topic_id %}" class="btn btn-primary" role="button">Подробнее об обновлениях</a></p>
-            </div>
-        </div>
-    </div>
-</div> 
+ 
 {% endblock content %}
