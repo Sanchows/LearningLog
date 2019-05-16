@@ -23,12 +23,20 @@ def topics(request):
     
     topics_public = Topic.objects.filter(public=True).order_by('-date_added') # темы public
     
+    # entries_count = Entry.objects.filter(topic=19).count()
+
     if request.user.is_authenticated:
         topics = Topic.objects.filter(owner=request.user).order_by('-date_added')
-        context = {'topics': topics,'topics_public': topics_public}
+        context = { 
+                    'topics': topics,
+                    'topics_public': topics_public,
+        }
+        
         return render(request, 'learning_logs/topics.html', context)
     else:
-        context = {'topics_public': topics_public}
+        context = {
+                    'topics_public': topics_public,
+        }
         return render(request, 'learning_logs/topics.html', context)
         
 #@login_required

@@ -9,6 +9,11 @@ class Topic(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     public = models.BooleanField(default=False)
+    
+    def calculateVotes(self):
+        return Entry.objects.filter(topic = self.id).count()
+
+    count_entries = property(calculateVotes)
 
     def __str__(self):
         """Возвращает строковое представление модели"""

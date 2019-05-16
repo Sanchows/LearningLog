@@ -19,6 +19,7 @@
             <h2>Ваши темы</h2>
             <div class="list-group">
                 {% for topic in topics %}
+                    
                     <a href="{% url 'topic' topic.id %}" class="list-group-item list-group-item-action">
                         <div class="one">
                             <div class="two">
@@ -30,14 +31,16 @@
                                 </font>
                             </div>
                             <div class="two">
-                                <small>
+                                <small> 
                                     Автор: {{ topic.owner }}
                                     <br>
+                                    Записей: {{ topic.count_entries }} :::
                                     {{ topic.date_added }}
                                 </small>
                             </div>
                         </div>
                     </a> 
+                    
                 {% empty %}
                     <li>У вас нет ни одной темы.</li>
                 {% endfor %}
@@ -64,6 +67,7 @@
                             <small>
                                 Автор: {{ topic.owner }}
                                 <br>
+                                Записей: {{ topic.count_entries }} :::
                                 {{ topic.date_added }}
                             </small>
                         </div>
