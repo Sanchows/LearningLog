@@ -32,7 +32,13 @@
                             </div>
                             <div class="two">
                                 <small> 
-                                    Автор: {{ topic.owner }}
+                                    Автор: <b>
+                                        {% if topic.owner.is_superuser %}
+                                            <font color="#FF0000">{{ topic.owner }}</font>
+                                        {% else %}
+                                            {{ topic.owner }}
+                                        {% endif %}
+                                        </b>
                                     <br>
                                     Записей: {{ topic.count_entries }} :::
                                     {{ topic.date_added }}
@@ -65,7 +71,13 @@
                         </div>
                         <div class="two">
                             <small>
-                                Автор: {{ topic.owner }}
+                                Автор: <b>
+                                    {% if topic.owner.is_superuser %}
+                                        <font color="#FF0000">{{ topic.owner }}</font>
+                                    {% else %}
+                                        {{ topic.owner }}
+                                    {% endif %}
+                                </b>
                                 <br>
                                 Записей: {{ topic.count_entries }} :::
                                 {{ topic.date_added }}

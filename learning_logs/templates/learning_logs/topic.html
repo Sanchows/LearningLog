@@ -12,7 +12,13 @@
             {% endif %}
             <font size=3>
                 <br>
-                Автор: {{ topic.owner }} 
+                Автор: <b>
+                        {% if topic.owner.is_superuser %}
+                            <font color="#FF0000">{{ topic.owner }}</font>
+                        {% else %}
+                            {{ topic.owner }}
+                        {% endif %}
+                    </b>
                 <br> 
                 Дата создания: {{ topic.date_added }}
                 <br>
